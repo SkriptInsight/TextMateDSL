@@ -1,3 +1,5 @@
+package io.github.skriptinsight.lang.model
+
 enum class ChatColors(val char: Char, val color: String, vararg val names: String) {
     BLACK('0', "#000000", "black"),
     DARK_BLUE('1', "#0000AA", "dark blue", "blue"),
