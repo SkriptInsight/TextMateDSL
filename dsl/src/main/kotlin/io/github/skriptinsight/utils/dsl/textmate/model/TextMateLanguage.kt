@@ -11,24 +11,16 @@ import java.io.File
 import java.util.*
 
 @LanguageDslMarker
-class TextMateLanguage {
+class TextMateLanguage : PatternContainer {
     var scopeName: String? = null
     var uuid: UUID? = null
     val repository = mutableMapOf<String, TextMateRule>()
-    val patterns = mutableListOf<TextMateRule>()
-    val captures = mutableMapOf<String, TextMateRule>()
+    override val patterns = mutableListOf<TextMateRule>()
+    override val captures: MutableMap<String, TextMateRule> = mutableMapOf()
+
 
     operator fun TextMateRule.unaryPlus(): TextMateRule {
         this@TextMateLanguage.repository[this.internalName] = this
-        return this
-    }
-
-    operator fun TextMateRule.invoke(): TextMateRule {
-        val rule = this
-        this@TextMateLanguage.patterns.add(TextMateRule("include_${rule.internalName}").apply {
-            include = "#${rule.internalName}"
-        })
-
         return this
     }
 

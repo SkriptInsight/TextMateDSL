@@ -10,3 +10,6 @@ const val LANGUAGE_CONSTANT = "constant.language"
 const val NUMERIC_CONSTANT = "constant.numeric"
 
 const val ILLEGAL = "invalid.illegal"
+
+// keyword.other
+const val KEYWORD_OTHER = "keyword.other"

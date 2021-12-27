@@ -14,15 +14,3 @@ fun rule(internalName: String, builder: TextMateRule.() -> Unit): TextMateRule {
     rule.builder()
     return rule
 }
-
-fun TextMateLanguage.capture(groupName: String, builder: TextMateRule.() -> Unit): TextMateRule {
-    val rule = TextMateRule("capture_$groupName")
-    rule.builder()
-    this.captures[groupName] = rule
-    return rule
-}
-
-fun TextMateLanguage.capture(groupName: String, rule: TextMateRule): TextMateRule {
-    this.captures[groupName] = rule
-    return rule
-}
