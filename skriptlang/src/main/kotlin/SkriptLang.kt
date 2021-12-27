@@ -2,6 +2,7 @@ import io.github.skriptinsight.utils.dsl.textmate.language
 import io.github.skriptinsight.utils.dsl.textmate.rule
 import io.github.skriptinsight.utils.dsl.textmate.utils.COMMENT_LINE
 import io.github.skriptinsight.utils.dsl.textmate.utils.KEYWORD_OTHER
+import io.github.skriptinsight.utils.dsl.textmate.utils.LANGUAGE_CONSTANT
 import java.io.File
 import java.util.*
 
@@ -19,13 +20,27 @@ fun main(args: Array<String>) {
             scopeName = COMMENT_LINE
         }
 
-        val variables = +rule("variable") {
+        val optionVariables = +rule("optionVariables") {
+            -"Variables for options"
+
+            match = Regex("\\{@[^}]+}")
+            scopeName = LANGUAGE_CONSTANT
+        }
+
+        val simpleVariables = +rule("variable") {
             -"Variables"
             scopeName = "variable.other.skript"
             begin = Regex("(?:(?:the )?var(?:iable)? )?\\{")
             end = Regex("}")
 
             "evaluated"()
+        }
+
+        val variables = +rule("variables") {
+            -"Rule with all Skript variables"
+
+            optionVariables()
+            simpleVariables()
         }
 
         val evaluated = +rule("evaluated") {
@@ -50,10 +65,21 @@ fun main(args: Array<String>) {
             scopeName = "string.quoted.double.skript"
             match = Regex("\"([^\"]*?(?:\"\"[^\"]*)*)\"")
 
-            capture("0") {
+            capture("1") {
                 evaluated()
+                optionVariables()
+
+                ChatColors.values().forEach {
+                    val colorName = it.name.lowercase(Locale.getDefault())
+                    +rule("chatcolor_$colorName") {
+                        -"Chat color: ${it.name}"
+                        scopeName = "constant.other.color.skript.$colorName"
+                        match = Regex("(?:[&§]${it.char}|${it.names.joinToString("|") { "<$it>" }})")
+                    }
+                }
             }
         }
+
 
         val code = +rule("code") {
             -"Code syntax for Skript"

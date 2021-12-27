@@ -33,4 +33,9 @@ interface PatternContainer {
         })
     }
 
+    operator fun TextMateRule.unaryPlus(): TextMateRule {
+        this@PatternContainer.patterns.add(this)
+        return this
+    }
+
 }

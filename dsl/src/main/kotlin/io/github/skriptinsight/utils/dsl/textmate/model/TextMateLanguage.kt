@@ -18,8 +18,7 @@ class TextMateLanguage : PatternContainer {
     override val patterns = mutableListOf<TextMateRule>()
     override val captures: MutableMap<String, TextMateRule> = mutableMapOf()
 
-
-    operator fun TextMateRule.unaryPlus(): TextMateRule {
+    override operator fun TextMateRule.unaryPlus(): TextMateRule {
         this@TextMateLanguage.repository[this.internalName] = this
         return this
     }
